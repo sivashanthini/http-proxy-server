@@ -5,6 +5,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.*;
 import java.security.cert.CertificateException;
 
@@ -36,9 +37,11 @@ public class SSLConfiguration {
         // initialise the keystore
         char[] password = "password".toCharArray();
         KeyStore ks = KeyStore.getInstance("PKCS12");
-        //TODO : Move to resource folder
-        FileInputStream fis = new FileInputStream("C:\\Program Files\\Java\\jdk-11.0.7\\bin\\keystore.jks");
-        ks.load(fis, password);
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream("keystore.jks");
+ 
+        ks.load(inputStream, password);
 
         KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
         kmf.init(ks, password);
